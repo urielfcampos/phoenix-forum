@@ -19,8 +19,11 @@ defmodule PhoenixForum.Forum do
 
   """
   def get_thread_with_replies(id) do
+
+    reply_query = from r in Reply, order_by: [desc: r.inserted_at]
+
     Repo.get!(Thread, id)
-    |>Repo.preload(:replies)
+    |>Repo.preload([replies: reply_query])
   end
 
   def list_all_threads() do
@@ -33,7 +36,7 @@ defmodule PhoenixForum.Forum do
     |> count_replies()
   end
 
-  def count_replies(threads) do
+  defp count_replies(threads) do
      Enum.map(threads, fn t -> Map.put(t, :replies_count, Enum.count(t.replies)) end)
   end
 

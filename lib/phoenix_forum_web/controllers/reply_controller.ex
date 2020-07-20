@@ -8,7 +8,11 @@ defmodule PhoenixForumWeb.ReplyController do
         |> put_flash(:info, "Reply posted successfully")
         |> redirect(to: Routes.thread_path(conn, :show, thread_id))
       {:error, %Ecto.Changeset{} = changeset} ->
-        Phoenix.View.render(PhoenixForumWeb.ThreadView, "show.html", [thread: thread_id, changeset: changeset])
+
+        thread = PhoenixForum.Forum.get_thread_with_replies(thread_id)
+        conn
+        |> put_view(PhoenixForumWeb.ThreadView)
+        |> render(:show, thread: thread, changeset: changeset)
     end
 
   end

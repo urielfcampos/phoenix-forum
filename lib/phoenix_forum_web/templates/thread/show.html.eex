@@ -2,7 +2,8 @@
   <h1><%= @thread.title %></h1>  <address class="thread-author"> - <%= @thread.author %></address>
 </div>
 <p class="thread-body"><%= @thread.body %></p>
-
+<hr class="divider">
+<h1>Replies: </h1>
 <%= for reply <- @thread.replies do %>
     <tr>
       <td>
@@ -20,10 +21,10 @@
         </div>
     <% end %>
     <div>
-        <%= textarea f, :body, placeholder: "Your reply" %>
+        <%= textarea f, :body, placeholder: "Your reply", class: "forum-text-area" %>
         <%= error_tag f, :body %>
     </div>
-  <div class="flex-container">
+  <div class="flex-container justify-between">
       <%= text_input f, :author, placeholder: "Your name", class: "forum-input" %>
       <div>
         <%= submit "Send", class: "forum-button" %>
