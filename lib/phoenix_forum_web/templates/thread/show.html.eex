@@ -1,0 +1,5 @@
+<div class="flex-container">
+  <h1><%= @thread.title %></h1>  <address class="thread-author"> - <%= @thread.author %></address>
+</div>
+<p class="thread-body"><%= @thread.body %></p>
+<span><%= link "Back", to: Routes.thread_path(@conn, :index) %></span>

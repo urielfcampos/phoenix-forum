@@ -1,0 +1,67 @@
+/* This file is for your main application css. */
+@import "./phoenix.css";
+
+/* Alerts and form errors */
+
+
+body{
+  color: #393939
+}
+
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+.alert-info {
+  color: #31708f;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+}
+.alert-warning {
+  color: #8a6d3b;
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+}
+.alert-danger {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+.alert p {
+  margin-bottom: 0;
+}
+.alert:empty {
+  display: none;
+}
+.justify-between{
+justify-content: space-between;
+}
+.flex-container{
+  display: flex;
+  width: 93%;
+}
+.forum-button{
+  color:#393939;
+  background-color: gray;
+  border: solid gray;
+  width: 150%;
+}
+.forum-text-area{
+  height: 15rem;
+}
+.forum-input{
+  flex-basis: 50%;
+}
+
+.thread-author{
+  padding-top: 13px;
+  margin-left: 10px;
+}
+
+.thread-body{
+  text-align: justify;
+  width: 100%;
+  height: 100%;
+}
