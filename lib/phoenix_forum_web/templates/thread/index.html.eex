@@ -6,7 +6,7 @@
   <tbody>
 <%= for thread <- @threads do %>
     <tr>
-      <td><h2><%= thread.title %></h1></td>
+      <td><h2><%= thread.title %></h2></td>
         <td><%= link "Details", to: Routes.thread_path(@conn, :show, thread) %></td>
         <td><%= thread.replies_count %> Replies</td>
     </tr>

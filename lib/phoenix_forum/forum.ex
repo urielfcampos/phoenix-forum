@@ -4,15 +4,11 @@ defmodule PhoenixForum.Forum do
   """
 
   import Ecto.Query, warn: false
-  alias PhoenixForum.Repo
 
+  alias PhoenixForum.Repo
   alias PhoenixForum.Forum.Thread
   alias PhoenixForum.Forum.Reply
 
-
-  defp thread_replies_query(query, %Thread{id: thread_id}) do
-    from(r in query, where: r.thread_id == ^thread_id)
-  end
   @doc """
   Returns the list of threads.
 
@@ -22,20 +18,25 @@ defmodule PhoenixForum.Forum do
       [%Thread{}, ...]
 
   """
-  def list_thread_with_replies(%Thread{} = thread) do
-    Reply
-    |> thread_replies_query(thread)
-    |> Repo.all()
+  def get_thread_with_replies(id) do
+
+    reply_query = from r in Reply, order_by: [desc: r.inserted_at]
+
+    Repo.get!(Thread, id)
+    |>Repo.preload([replies: reply_query])
   end
 
   def list_all_threads() do
-    Thread
-    |> Repo.all()
+
+    query = from t in Thread,
+            order_by: [desc: t.inserted_at]
+
+    Repo.all(query)
     |> Repo.preload(:replies)
     |> count_replies()
   end
 
-  def count_replies(threads) do
+  defp count_replies(threads) do
      Enum.map(threads, fn t -> Map.put(t, :replies_count, Enum.count(t.replies)) end)
   end
 
@@ -74,40 +75,6 @@ defmodule PhoenixForum.Forum do
   end
 
   @doc """
-  Updates a thread.
-
-  ## Examples
-
-      iex> update_thread(thread, %{field: new_value})
-      {:ok, %Thread{}}
-
-      iex> update_thread(thread, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_thread(%Thread{} = thread, attrs) do
-    thread
-    |> Thread.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a thread.
-
-  ## Examples
-
-      iex> delete_thread(thread)
-      {:ok, %Thread{}}
-
-      iex> delete_thread(thread)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_thread(%Thread{} = thread) do
-    Repo.delete(thread)
-  end
-
-  @doc """
   Returns an `%Ecto.Changeset{}` for tracking thread changes.
 
   ## Examples
@@ -119,4 +86,20 @@ defmodule PhoenixForum.Forum do
   def change_thread(%Thread{} = thread, attrs \\ %{}) do
     Thread.changeset(thread, attrs)
   end
+
+
+  def change_reply(%Reply{} = reply, attrs \\ %{})do
+    Reply.changeset(reply, attrs)
+  end
+
+  def create_reply(thread_id ,attrs \\ %{}) do
+    thread = get_thread!(thread_id)
+    %Reply{}
+    |>Reply.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:thread, thread)
+    |> Repo.insert()
+
+  end
+
+
 end

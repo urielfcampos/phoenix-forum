@@ -3,6 +3,7 @@ defmodule PhoenixForumWeb.ThreadController do
 
   alias PhoenixForum.Forum
   alias PhoenixForum.Forum.Thread
+  alias PhoenixForum.Forum.Reply
 
   def index(conn, _params) do
     threads = Forum.list_all_threads()
@@ -27,36 +28,9 @@ defmodule PhoenixForumWeb.ThreadController do
   end
 
   def show(conn, %{"id" => id}) do
-    thread = Forum.get_thread!(id)
-    render(conn, "show.html", thread: thread)
+    thread = Forum.get_thread_with_replies(id)
+    changeset = Forum.change_reply(%Reply{})
+    render(conn, "show.html", [thread: thread, changeset: changeset])
   end
 
-  def edit(conn, %{"id" => id}) do
-    thread = Forum.get_thread!(id)
-    changeset = Forum.change_thread(thread)
-    render(conn, "edit.html", thread: thread, changeset: changeset)
-  end
-
-  def update(conn, %{"id" => id, "thread" => thread_params}) do
-    thread = Forum.get_thread!(id)
-
-    case Forum.update_thread(thread, thread_params) do
-      {:ok, thread} ->
-        conn
-        |> put_flash(:info, "Thread updated successfully.")
-        |> redirect(to: Routes.thread_path(conn, :show, thread))
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", thread: thread, changeset: changeset)
-    end
-  end
-
-  def delete(conn, %{"id" => id}) do
-    thread = Forum.get_thread!(id)
-    {:ok, _thread} = Forum.delete_thread(thread)
-
-    conn
-    |> put_flash(:info, "Thread deleted successfully.")
-    |> redirect(to: Routes.thread_path(conn, :index))
-  end
 end
