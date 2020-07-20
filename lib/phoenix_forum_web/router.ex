@@ -16,6 +16,7 @@ defmodule PhoenixForumWeb.Router do
   scope "/", PhoenixForumWeb do
     pipe_through :browser
 
+    post "/reply", ReplyController, :create
     resources "/threads", ThreadController, only: [:show, :new, :create]
     get "/", ThreadController, :index
   end
