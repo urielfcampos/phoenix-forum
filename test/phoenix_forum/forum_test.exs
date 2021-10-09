@@ -7,7 +7,11 @@ defmodule PhoenixForum.ForumTest do
     alias PhoenixForum.Forum.Thread
 
     @valid_attrs %{author: "some author", body: "some body", title: "some title"}
-    @update_attrs %{author: "some updated author", body: "some updated body", title: "some updated title"}
+    @update_attrs %{
+      author: "some updated author",
+      body: "some updated body",
+      title: "some updated title"
+    }
     @invalid_attrs %{author: nil, body: nil, title: nil}
 
     def thread_fixture(attrs \\ %{}) do

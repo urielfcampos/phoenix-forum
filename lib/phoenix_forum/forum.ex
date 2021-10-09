@@ -19,17 +19,16 @@ defmodule PhoenixForum.Forum do
 
   """
   def get_thread_with_replies(id) do
-
     reply_query = from r in Reply, order_by: [desc: r.inserted_at]
 
     Repo.get!(Thread, id)
-    |>Repo.preload([replies: reply_query])
+    |> Repo.preload(replies: reply_query)
   end
 
   def list_all_threads() do
-
-    query = from t in Thread,
-            order_by: [desc: t.inserted_at]
+    query =
+      from t in Thread,
+        order_by: [desc: t.inserted_at]
 
     Repo.all(query)
     |> Repo.preload(:replies)
@@ -37,7 +36,7 @@ defmodule PhoenixForum.Forum do
   end
 
   defp count_replies(threads) do
-     Enum.map(threads, fn t -> Map.put(t, :replies_count, Enum.count(t.replies)) end)
+    Enum.map(threads, fn t -> Map.put(t, :replies_count, Enum.count(t.replies)) end)
   end
 
   @doc """
@@ -87,19 +86,16 @@ defmodule PhoenixForum.Forum do
     Thread.changeset(thread, attrs)
   end
 
-
-  def change_reply(%Reply{} = reply, attrs \\ %{})do
+  def change_reply(%Reply{} = reply, attrs \\ %{}) do
     Reply.changeset(reply, attrs)
   end
 
-  def create_reply(thread_id ,attrs \\ %{}) do
+  def create_reply(thread_id, attrs \\ %{}) do
     thread = get_thread!(thread_id)
+
     %Reply{}
-    |>Reply.changeset(attrs)
+    |> Reply.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:thread, thread)
     |> Repo.insert()
-
   end
-
-
 end
