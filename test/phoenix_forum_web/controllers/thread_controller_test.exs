@@ -4,7 +4,11 @@ defmodule PhoenixForumWeb.ThreadControllerTest do
   alias PhoenixForum.Forum
 
   @create_attrs %{author: "some author", body: "some body", title: "some title"}
-  @update_attrs %{author: "some updated author", body: "some updated body", title: "some updated title"}
+  @update_attrs %{
+    author: "some updated author",
+    body: "some updated body",
+    title: "some updated title"
+  }
   @invalid_attrs %{author: nil, body: nil, title: nil}
 
   def fixture(:thread) do
@@ -75,6 +79,7 @@ defmodule PhoenixForumWeb.ThreadControllerTest do
     test "deletes chosen thread", %{conn: conn, thread: thread} do
       conn = delete(conn, Routes.thread_path(conn, :delete, thread))
       assert redirected_to(conn) == Routes.thread_path(conn, :index)
+
       assert_error_sent 404, fn ->
         get(conn, Routes.thread_path(conn, :show, thread))
       end

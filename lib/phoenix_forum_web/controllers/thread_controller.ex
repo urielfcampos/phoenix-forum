@@ -30,7 +30,6 @@ defmodule PhoenixForumWeb.ThreadController do
   def show(conn, %{"id" => id}) do
     thread = Forum.get_thread_with_replies(id)
     changeset = Forum.change_reply(%Reply{})
-    render(conn, "show.html", [thread: thread, changeset: changeset])
+    render(conn, "show.html", thread: thread, changeset: changeset)
   end
-
 end
