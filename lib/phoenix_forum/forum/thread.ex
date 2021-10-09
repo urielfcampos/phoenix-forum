@@ -1,4 +1,6 @@
 defmodule PhoenixForum.Forum.Thread do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 
